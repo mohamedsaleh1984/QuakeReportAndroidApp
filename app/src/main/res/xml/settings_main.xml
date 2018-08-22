@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_earth_mag">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Choose the minimum earth quack magnitude."
+            android:entries="@array/mag"
+            android:entryValues="@array/magvalues"
+            android:key="@string/settings_min_magnitude_key"
+            android:summary="%s"
+            android:title="@string/settings_min_magnitude_label" />
+        <ListPreference
+            android:defaultValue="10"
+            android:dialogTitle="Choose maximum number of earth quack."
+            android:entries="@array/max"
+            android:entryValues="@array/maxvalues"
+            android:key="maximumno"
+            android:summary="%s"
+            android:title="Maximum Number of Earth Quack to view." />
+        <ListPreference
+            android:defaultValue="time"
+            android:dialogTitle="Order By"
+            android:entries="@array/order"
+            android:entryValues="@array/ordervalues"
+            android:key="orderby"
+            android:summary="%s"
+            android:title="Choose Order By Method" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_earth_date">
+
+        <Preference
+            android:key="@string/settings_start_date_key"
+            android:summary=""
+            android:title="@string/settings_start_date_label" />
+        <Preference
+            android:key="@string/settings_end_date_key"
+            android:summary=""
+            android:title="@string/settings_end_date_label" />
+    </PreferenceCategory>
+    <!--
+
+
+      -->
+
+
+</PreferenceScreen>

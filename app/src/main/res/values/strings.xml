@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quake Report</string>
+
+    <!--Messages Constants -->
+    <string name="noearthquakes">No Earthquakes Info.</string>
+    <string name="nointernet">No Internet Connectivity.</string>
+
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Quake Report Settings</string>
+
+    <!-- Labels -->
+    <string name="settings_min_magnitude_label">Minimum Magnitude</string>
+    <string name="settings_start_date_label">Start Date</string>
+    <string name="settings_end_date_label">End Date</string>
+
+    <!-- KEYS -->
+    <string name="settings_start_date_key" translatable="false">start_date</string>
+    <string name="settings_end_date_key" translatable="false">end_date</string>
+    <string name="settings_min_magnitude_key" translatable="false">min_magnitude</string>
+
+    <!-- Preferences Sections-->
+    <string name="pref_earth_mag">Earth Quake Magnitude</string>
+    <string name="pref_earth_date">Earth Quake Period</string>
+
+    <!-- About Dialog box Strings-->
+    <string name="about">Developed/Designed By : Mohamed Abdelaziz\nE-mail : mohamedsaleh1984@hotmail.com</string>
+    <string name="lblabout">About Quake Report</string>
+
+    <!-- Arrays for List-->
+    <string-array name="order">
+        <item>Time</item>
+        <item>Time Ascending</item>
+        <item>Magnitude</item>
+        <item>Magnitude Ascending</item>
+
+    </string-array>
+    <string-array name="ordervalues">
+        <item>time</item>
+        <item>time-asc</item>
+        <item>magnitude</item>
+        <item>magnitude-asc</item>
+    </string-array>
+
+    <string-array name="mag">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="magvalues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="max">
+        <item>10</item>
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>700</item>
+        <item>800</item>
+        <item>900</item>
+        <item>1000</item>
+    </string-array>
+    <string-array name="maxvalues">
+        <item>10</item>
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>700</item>
+        <item>800</item>
+        <item>900</item>
+        <item>1000</item>
+    </string-array>
+</resources>
