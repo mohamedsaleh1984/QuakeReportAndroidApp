@@ -21,3 +21,18 @@ Getting Started
 
 This sample uses the Gradle build system. To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
+
+Changes
+-------
+1. Add About Box.
+2. Modify Menu Items and Show Icons.
+3. Fix Custom List Adapter Duplicated Items.
+4. Fix Cursor Loader Adapter.
+5. Provide Sorting Class.
+6. Provider Error Adapter.
+7. Fix reload Date Picker Dialog in fragment.
+8. Fix Fragment Font.
+9. Add Settings Categories.
+10. Using Loaders instead of AsyncTask class.
+11. Change Package Name.
+12. Add Animation to ListView.
