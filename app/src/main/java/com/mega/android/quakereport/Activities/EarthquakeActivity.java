@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.mega.android.quakereport.DT.Earthquake;
 import com.mega.android.quakereport.Backend.EarthquakeAdapter;
 import com.mega.android.quakereport.Backend.EarthquakeLoader;
@@ -24,6 +24,7 @@ import com.mega.android.quakereport.R;
 import com.mega.android.quakereport.UI.AboutBox;
 import com.mega.android.quakereport.UI.ErrorDialog;
 import com.mega.android.quakereport.Util.Utils;
+
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity
@@ -36,7 +37,7 @@ public class EarthquakeActivity extends AppCompatActivity
     private static final int EARTHQUAKE_LOADER_ID = 100;
     private SharedPreferences sharedPreferences;
     private LoaderManager loaderManager;
-
+    public static boolean bIsQueryRunning = false;
     //region UI Elements
     private ProgressBar progressBar;
     private TextView textViewEmpty;
@@ -45,9 +46,33 @@ public class EarthquakeActivity extends AppCompatActivity
     //endregion UI Elements
 
     //region Activity Override Methods
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(bIsQueryRunning)
+            resetQuery();
+
+        //Toast.makeText(this,"onStart",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(bIsQueryRunning)
+            resetQuery();
+    //    Toast.makeText(this,"onStop",Toast.LENGTH_LONG).show();
+    }
+
+    private void resetQuery()
+    {
+        earthquakeListView.setEmptyView(findViewById(R.id.tvempty));
+        fetchData();
+    }
+
     /**
      * onCreate Method
-     * */
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +80,10 @@ public class EarthquakeActivity extends AppCompatActivity
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EarthquakeActivity.this);
         //Bug Fix for Default/First Installation Crash//////////////////////////////////////////////
-        if(TextUtils.isEmpty(sharedPreferences.getString("start_date", null)))
-            sharedPreferences.edit().putString("start_date",Utils.getTodayDateForUI()).commit();
-        if(TextUtils.isEmpty(sharedPreferences.getString("end_date", null)))
-            sharedPreferences.edit().putString("end_date",Utils.getTodayDateForUI()).commit();
+        if (TextUtils.isEmpty(sharedPreferences.getString("start_date", null)))
+            sharedPreferences.edit().putString("start_date", Utils.getTodayDateForUI()).commit();
+        if (TextUtils.isEmpty(sharedPreferences.getString("end_date", null)))
+            sharedPreferences.edit().putString("end_date", Utils.getTodayDateForUI()).commit();
         ////////////////////////////////////////////////////////////////////////////////////////////
         progressBar = (ProgressBar) findViewById(R.id.loading_spinner);
         progressBar.setVisibility(View.VISIBLE);
@@ -84,9 +109,10 @@ public class EarthquakeActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     /**
      * Menu Items Handlers.
-     * */
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -141,18 +167,20 @@ public class EarthquakeActivity extends AppCompatActivity
     @Override
     public Loader<ArrayList<Earthquake>> onCreateLoader(int id, Bundle args) {
         Log.i(LOG_TAG, generateJSONfromPreferences());
+        bIsQueryRunning = true;
         return new EarthquakeLoader(EarthquakeActivity.this, generateJSONfromPreferences());
     }
 
     /**
      * Call back after Loader Finished Execution.
-     * */
+     */
     @Override
     public void onLoadFinished(Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
         // Clear the adapter of previous earthquake data
         if (earthquakeAdapter != null)
             earthquakeAdapter.clear();
 
+        bIsQueryRunning = false;
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         progressBar.setVisibility(View.GONE);
@@ -162,14 +190,16 @@ public class EarthquakeActivity extends AppCompatActivity
             earthquakeAdapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakes);
             earthquakeListView.setAdapter(earthquakeAdapter);
         } else {
-            if (Utils.checkInternet(this)==false)
+            if (Utils.checkInternet(this) == false)
                 textViewEmpty.setText(R.string.nointernet);
-
-            if(earthquakeAdapter == null || earthquakes == null)
-                textViewEmpty.setText(R.string.noearthquakes);
-
-            earthquakeListView.setVisibility(View.VISIBLE);
+            else {
+                if (earthquakeAdapter == null || earthquakes == null)
+                    textViewEmpty.setText(R.string.noearthquakes);
+                else
+                    earthquakeListView.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     /**
@@ -186,7 +216,7 @@ public class EarthquakeActivity extends AppCompatActivity
 
     /**
      * Generate JSON Query from SharedPreferences.
-     * */
+     */
     private String generateJSONfromPreferences() {
         StringBuilder stringBuilder = new StringBuilder("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson");
 
@@ -196,7 +226,7 @@ public class EarthquakeActivity extends AppCompatActivity
         String strLimit = sharedPreferences.getString("maximumno", null);
         String strOrderby = sharedPreferences.getString("orderby", null);
 
-      //  Toast.makeText(EarthquakeActivity.this, strMinMag + "\n" + strStart + "\n" + strEnd + "\n" + strLimit, Toast.LENGTH_LONG).show();
+        //  Toast.makeText(EarthquakeActivity.this, strMinMag + "\n" + strStart + "\n" + strEnd + "\n" + strLimit, Toast.LENGTH_LONG).show();
 
         try {
             if (strStart != null)
@@ -227,35 +257,9 @@ public class EarthquakeActivity extends AppCompatActivity
             Log.i(LOG_TAG, String.format("%s ** %s", "generateJSONfromPreferences", stringBuilder.toString()));
 
         } catch (Exception edx) {
-         //   Toast.makeText(EarthquakeActivity.this, edx.getMessage(), Toast.LENGTH_LONG).show();
+            //   Toast.makeText(EarthquakeActivity.this, edx.getMessage(), Toast.LENGTH_LONG).show();
             ErrorDialog.Show(this, "Error", edx.getMessage(), R.drawable.about);
         }
         return stringBuilder.toString();
     }
 }
-//region unused Commented Code.
-/*
-private void fetchUserPreferences() throws ParseException {
-        try {
-            String strMinMag = sharedPreferences.getString("min_magnitude", null);
-            String strStart = sharedPreferences.getString("start_date", null);
-            String strEnd = sharedPreferences.getString("end_date", null);
-            String iLimit = sharedPreferences.getString("maximumno", null);
-            String strOrder = sharedPreferences.getString("orderby", null);
-            Toast.makeText(EarthquakeActivity.this, strMinMag + "\n" + strStart + "\n" + strEnd + "\n" + iLimit + "\n" + strOrder, Toast.LENGTH_LONG).show();
-        } catch (Exception ex) {
-            Toast.makeText(EarthquakeActivity.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-        if (bUserAppliedChanges) {
-        //
-            return new EarthquakeLoader(EarthquakeActivity.this, Utils.XXX);
-        } else {
-            return new EarthquakeLoader(EarthquakeActivity.this, Utils.XXX);
-        }
-
-        //Fully Dynamic JSON Generator.
-        //return new EarthquakeLoader(EarthquakeActivity.this, Utils.GEN_JSON_RESPONSE);
-        //return new EarthquakeLoader(EarthquakeActivity.this, Utils.ZZZZ);*/
-//endregion unused
