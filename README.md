@@ -3,6 +3,7 @@ Quake Report App
 
 This app displays a list of recent earthquakes in the world
 from the U.S. Geological Survey (USGS) organization.
+The app by default will fetch today's date and the day before, you can change the range in the settings.
 
 Getting Started
 ---------------
